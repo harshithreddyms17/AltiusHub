@@ -26,7 +26,7 @@ app.post('/invoices', (req, res) => {
     //i used postman to run the check the output
     res.status(201).json(invoice);
 });
-
+//I chained all the calls to this route because it involves dealing with the parameter id
 //Retrieve
 app.route("/invoices/:id")
     .get((req, res) => {
