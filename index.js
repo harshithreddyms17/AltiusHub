@@ -12,7 +12,7 @@ app.post('/invoices', (req, res) => {
     const invoiceItems = items.map(item => ({
         ...item, id: uuidv4(), amount: item.quantity * item.price
     }));
-    //incase the invoice doesnt exist
+    //incase the invoice doesnt exist (Validation)
     if (invoiceItems.some(item => item.price <= 0 || item.quantity <= 0 || item.amount <= 0)) {
         return res.status(400).json({ error: "Invalid quantities or prices in items" });
     }
@@ -58,10 +58,12 @@ app.route("/invoices/:id")
             id: item.id || uuidv4(),
             amount: item.quantity * item.price
         }));
+         //incase the invoice doesnt exist (Validation)
         if (invoiceItems.some(item => item.quantity <= 0 || item.price <= 0 || item.amount <= 0)) {
             return res.status(400).json({ error: "Invalid quantities or prices in items" });
         }
         const totalAmount = calculateAmount(invoiceItems, billSundries);
+        //code snippet creates a new object called updatedInvoice by merging the properties of an existing invoice with new or modified values
         const updatedInvoice = {
             ...invoices[index],
             date,customerName,billingAddress,shippingAddress,GSTIN,totalAmount,items: invoiceItems,
