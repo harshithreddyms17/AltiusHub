@@ -5,22 +5,25 @@ const { v4: uuidv4 } = require('uuid');
 const calculateAmount = require('./calculateAmount');
 app.use(express.json());
 const PORT  = 3001
-//Create
-let invoiceCounter = 1;
+//Create 
+let invoiceCounter = 1; // to keep track of invoices
 app.post('/invoices', (req, res) => {
     const { date, customerName, billingAddress, shippingAddress, GSTIN, items, billSundries } = req.body;
     const invoiceItems = items.map(item => ({
         ...item, id: uuidv4(), amount: item.quantity * item.price
     }));
+    //incase the invoice doesnt exist
     if (invoiceItems.some(item => item.price <= 0 || item.quantity <= 0 || item.amount <= 0)) {
         return res.status(400).json({ error: "Invalid quantities or prices in items" });
     }
     const totalAmount = calculateAmount(invoiceItems, billSundries);
     const invoice = {
-        id: uuidv4(), date, invoiceNumber: invoiceCounter++, customerName, billingAddress, shippingAddress, GSTIN, totalAmount, items: invoiceItems,
+        id: uuidv4(), date, invoiceNumber: invoiceCounter++, customerName, billingAddress, shippingAddress, GSTIN, totalAmount, items: invoiceItems, 
         billSundries: billSundries.map(bs => ({ ...bs, id: uuidv4() }))
     };
+    //pushing the invoice into the array
     invoices.push(invoice);
+    //i used postman to run the check the output
     res.status(201).json(invoice);
 });
 
