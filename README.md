@@ -44,3 +44,4 @@ To simulate this environment, I used postman to check and test all the routes.
 testdata.json:
 It contains test data that can be used
 
+*To start the application use npm start* 
